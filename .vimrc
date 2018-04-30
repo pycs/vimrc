@@ -9,20 +9,29 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'tmhedberg/SimpylFold'
-Plugin 'vim-scripts/indentpython.vim'
 Bundle 'Valloric/YouCompleteMe'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'nvie/vim-flake8'
-Plugin 'jnurmine/Zenburn'
-Plugin 'altercation/vim-colors-solarized'
+Plugin 'tmhedberg/SimpylFold'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'kien/ctrlp.vim'
-Plugin 'tpope/vim-fugitive'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plugin 'jmcantrell/vim-virtualenv'
+
+Plugin 'vim-syntastic/syntastic'
+Plugin 'nvie/vim-flake8'
+Plugin 'vim-scripts/indentpython.vim'
 Plugin 'hynek/vim-python-pep8-indent'
+Plugin 'jmcantrell/vim-virtualenv'
+
+Plugin 'Chiel92/vim-autoformat'
+
+Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
+
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'jnurmine/Zenburn'
+Plugin 'tomasr/molokai'
+Plugin 'ErichDonGubler/vim-sublime-monokai'
+Plugin 'pangloss/vim-javascript'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -55,12 +64,12 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-"
-"split navigations
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+
+" Split navigations
+"nnoremap <C-J> <C-W><C-J>
+"nnoremap <C-K> <C-W><C-K>
+"nnoremap <C-L> <C-W><C-L>
+"nnoremap <C-H> <C-W><C-H>
 
 " Enable folding
 set foldmethod=indent
@@ -70,7 +79,7 @@ nnoremap <space> za
 
 let g:SimpylFold_docstring_preview=1
 
-" Indentation
+" Indentation (python)
 au BufNewFile,BufRead *.py
     \ set tabstop=4 |
     \ set softtabstop=4 |
@@ -80,7 +89,14 @@ au BufNewFile,BufRead *.py
     \ set autoindent |
     \ set fileformat=unix |
 
+" Indentation (web)
 au BufNewFile,BufRead *.js, *.html, *.css
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2 |
+
+" Indentation (ruby) 
+au BufNewFile,BufRead *.rb
     \ set tabstop=2 |
     \ set softtabstop=2 |
     \ set shiftwidth=2 |
@@ -106,20 +122,23 @@ map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "EOF
 
 " Syntax highlighting
-
 let python_highlight_all=1
 syntax on
 
 " Color schemes
-
 if has('gui_running')
-  set background=dark
-  colorscheme solarized
+  set t_Co=256
+  colorscheme sublimemonokai 
+  " set background=dark
+  " colorscheme solarized
 else
-  colorscheme zenburn
+  set t_Co=256
+  " colorscheme zenburn
+  " colorscheme molokai
+  colorscheme sublimemonokai 
 endif
 
-call togglebg#map("<F5>")
+" call togglebg#map("<F5>")
 
 " Nerdtree file browsing
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
@@ -127,5 +146,21 @@ let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 " Line numbering
 set nu
 
-"let g:ycm_server_keep_logfiles = 1
-"let g:ycm_server_log_level = 'debug'
+" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+
+nnoremap <C-K> :SyntasticCheck<CR>
+nnoremap <C-J> :SyntasticReset<CR> 
+
+" let g:syntastic_python_checkers = ['flake8', 'pep8', 'pycodestyle', 'pyflakes', 'pylint', 'python'] 
+" let g:syntastic_python_flake8_exec = 'flake8'
+" let g:syntastic_python_pylint_exec = 'pylint'
+" let g:ycm_server_keep_logfiles = 1
+" let g:ycm_server_log_level = 'debug'
