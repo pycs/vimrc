@@ -162,5 +162,9 @@ nnoremap <C-J> :SyntasticReset<CR>
 " let g:syntastic_python_checkers = ['flake8', 'pep8', 'pycodestyle', 'pyflakes', 'pylint', 'python'] 
 " let g:syntastic_python_flake8_exec = 'flake8'
 " let g:syntastic_python_pylint_exec = 'pylint'
+
+" AutoPEP8 (gg gq G)
+au FileType python setlocal formatprg=autopep8\ -
+
 " let g:ycm_server_keep_logfiles = 1
 " let g:ycm_server_log_level = 'debug'
